@@ -1,2 +1,12 @@
 # HowDrainersWork
 A quick overview of how cryptocurrency drainers work with a few code examples on how to keep safe and how to detect cryptocurrency drainers.
+
+Cryptocurrency drainers work by using a web3 wallet connection (usually ethereum or solana) to get the victim's address. Once the address is grabbed it is usually submitted to a malicious backend endpoint. This endpoint's task is to create malicious transactions designed to drain the user's entire wallet - they use APIs such as moralis to get a list of all the victims assets from their address and then value them using pricing APIs from highest to lowest, the highest value will almost always come first. Most cryptocurrency drainers will use Telegram's bot API to send logs to the scammer to inform them that someone has connected and the value of the connection. The backend endpoint will then serialize the malicious transactions and return them back to the browser where the drainer script will use the wallet connection to prompt the malicious transactions. Once signed, the transactions are then re-serialized and submitted to the backend to be submitted to the network and the scammer is then once again informed that they have successfully drained a victim.
+
+For Solana, the victims entire wallet can be drained within 1 signature as wallets support .signAllTransactions but for ethereum, as far as I'm aware, it will prompt 1 asset drain at a time.
+
+Most drainers are provided by scam-as-a-service (SAAS) businesses that usually charge an entry fee or take a percentage of all drains, I will also go into a few of them on my profile. This is important because these drainers often provide their clients (scammers) with lots of different options that makes the drainer behave differently, for example 'Minimum Drain Value' is an option in most drainers that allows the scammers to enter a minimum value the victim must have, if they do not meet the required amount then it will display "Wallet Not Eligible" or another custom text that can usually also be set as an option by the scammer.
+
+As these options are usuallly hard encoded inside of drainer scripts, they are usually accessible with simple code that can be executed via the console and is usually stored under "window.config" or "window.options".
+
+You can use the detect-config.js file in this repository as a simple way to detect drainer scripts, although it is not always 100% accurate, it will definently detect some.
